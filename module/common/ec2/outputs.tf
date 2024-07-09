@@ -1,7 +1,9 @@
 output "instance_id" {
-  value = aws_instance.jenkins.id
+  description = "The ID of the instance"
+  value       = aws_instance.jenkins.id
 }
 
 output "public_ip" {
-  value = aws_instance.jenkins.public_ip
+  description = "The public IP of the instance"
+  value       = aws_instance.jenkins.public_ip
 }

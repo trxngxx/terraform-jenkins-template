@@ -20,14 +20,14 @@ module "ec2" {
   instance_type  = var.instance_type
   key_name       = var.key_name
   subnet_id      = module.vpc.subnet_id
-  instance_name  = "Jenkins-Server"
   security_group = module.security_group.security_group_id
+  instance_name  = "Jenkins-Server"
 }
 
 module "s3" {
   source       = "./modules/s3"
   bucket_name  = var.bucket_name
-  environment  = var.environment
+  acl          = var.acl
 }
 
 output "jenkins_instance_id" {

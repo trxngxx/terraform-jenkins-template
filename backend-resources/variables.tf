@@ -19,6 +19,7 @@ variable "subnet_cidr" {
 variable "ami" {
   description = "AMI ID"
   type        = string
+  default     = "ami-0c55b159cbfafe1f0"
 }
 
 variable "instance_type" {
@@ -33,14 +34,8 @@ variable "key_name" {
 }
 
 variable "your_ip" {
-  description = "Your IP address"  # Update public IP address
+  description = "Your IP address"
   type        = string
-}
-
-variable "environment" {
-  description = "Environment tag"
-  type        = string
-  default     = "Dev"
 }
 
 variable "bucket_name" {
