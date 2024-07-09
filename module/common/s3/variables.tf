@@ -8,3 +8,8 @@ variable "acl" {
   type        = string
   default     = "private"
 }
+
+variable "environment" {
+  description = "Environment tag"
+  type        = string
+}

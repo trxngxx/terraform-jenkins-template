@@ -1,43 +1,33 @@
 provider "aws" {
-  region = "ap-southeast-1"
+  region = var.aws_region
 }
 
 module "vpc" {
   source      = "./modules/vpc"
-  vpc_cidr    = "10.0.0.0/16"
-  subnet_cidr = "10.0.1.0/24"
+  vpc_cidr    = var.vpc_cidr
+  subnet_cidr = var.subnet_cidr
 }
 
 module "security_group" {
   source  = "./modules/security_group"
   vpc_id  = module.vpc.vpc_id
-  your_ip = "your-ip-address/32"     #update this IP address
+  your_ip = var.your_ip
 }
 
 module "ec2" {
   source         = "./modules/ec2"
-  ami            = "ami-0c55b159cbfafe1f0"     #update this AMI
-  instance_type  = "t2.micro"  
-  key_name       = "your-key-name"             #update this keypair
+  ami            = var.ami
+  instance_type  = var.instance_type
+  key_name       = var.key_name
   subnet_id      = module.vpc.subnet_id
-  user_data      = <<-EOF
-                    #!/bin/bash
-                    yum update -y
-                    yum install -y java-11-openjdk-devel
-                    wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-                    rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-                    yum install -y jenkins
-                    systemctl start jenkins
-                    systemctl enable jenkins
-                    EOF
   instance_name  = "Jenkins-Server"
   security_group = module.security_group.security_group_id
 }
 
 module "s3" {
   source       = "./modules/s3"
-  bucket_name  = "your-jenkins-artifacts-bucket"
-  environment  = "Dev"
+  bucket_name  = var.bucket_name
+  environment  = var.environment
 }
 
 output "jenkins_instance_id" {

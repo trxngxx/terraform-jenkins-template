@@ -1,7 +1,9 @@
 output "vpc_id" {
-  value = aws_vpc.custom_vpc.id
+  description = "The ID of the VPC"
+  value       = aws_vpc.this.id
 }
 
 output "subnet_id" {
-  value = aws_subnet.custom_subnet.id
+  description = "The ID of the subnet"
+  value       = aws_subnet.this.id
 }
