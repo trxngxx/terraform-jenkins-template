@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "The AWS region to create resources in."
   type        = string
-  default     = "us-east-1"
+  default     = "ap-southeast-1"
 }
 
 variable "vpc_cidr" {
@@ -19,7 +19,7 @@ variable "subnet_cidr" {
 variable "ami" {
   description = "AMI ID"
   type        = string
-  default     = "ami-0c55b159cbfafe1f0"
+  default     = "ami-0c55b159cbfafe1f0"    #change this AMI
 }
 
 variable "instance_type" {
@@ -34,12 +34,7 @@ variable "key_name" {
 }
 
 variable "your_ip" {
-  description = "Your IP address"
-  type        = string
-}
-
-variable "bucket_name" {
-  description = "S3 bucket name"
+  description = "Your IP address"      #Update public IP address
   type        = string
 }
 
