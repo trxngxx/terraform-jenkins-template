@@ -19,7 +19,7 @@ variable "subnet_cidr" {
 variable "ami" {
   description = "AMI ID"
   type        = string
-  default     = "ami-0c55b159cbfafe1f0"
+  default     = "ami-0c55b159cbfafe1f0"     #change this when needed
 }
 
 variable "instance_type" {
