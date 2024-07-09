@@ -1,19 +1,17 @@
-resource "aws_s3_bucket" "jenkins_artifacts_bucket" {
+resource "aws_s3_bucket" "this" {
   bucket = var.bucket_name
-}
+  acl    = var.acl
 
-resource "aws_s3_bucket_ownership_controls" "jenkins_artifacts_bucket_ownership_controls" {
-  bucket = aws_s3_bucket.jenkins_artifacts_bucket.id
-  rule {
-    object_ownership = "ObjectWriter"
+  tags = {
+    Name        = var.bucket_name
+    Environment = var.environment
   }
 }
 
-resource "aws_s3_bucket_acl" "jenkins_artifacts_bucket_acl" {
-  bucket = aws_s3_bucket.jenkins_artifacts_bucket.id
-  acl    = var.acl
+output "bucket_id" {
+  value = aws_s3_bucket.this.id
 }
 
-output "bucket_name" {
-  value = aws_s3_bucket.jenkins_artifacts_bucket.id
+output "bucket_arn" {
+  value = aws_s3_bucket.this.arn
 }
