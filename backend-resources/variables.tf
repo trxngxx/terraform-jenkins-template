@@ -48,3 +48,15 @@ variable "environment" {
   type        = string
   default     = "Dev"
 }
+
+variable "bucket_name" {
+  description = "Name of the S3 bucket"
+  type        = string
+  default     = "jenkins-artifacts-bucket"
+}
+
+variable "acl" {
+  description = "Canned ACL to apply"
+  type        = string
+  default     = "private"
+}
