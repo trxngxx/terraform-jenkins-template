@@ -2,38 +2,14 @@
 This repository contains Terraform code to set up an AWS infrastructure with Jenkins installed on an EC2 instance. The setup includes a VPC, subnet, security group, EC2 instance, and an S3 bucket for Jenkins artifacts.
 
 ## Prerequisites ##
-Terraform installed
-AWS credentials configured (e.g., via aws configure)
-SSH key pair available in the specified AWS region
-
-## Project Structure ##
-backend-resources/
-  ├── main.tf
-  ├── outputs.tf
-  ├── variables.tf
-  ├── modules/
-  │   ├── vpc/
-  │   │   ├── main.tf
-  │   │   ├── outputs.tf
-  │   │   └── variables.tf
-  │   ├── security_group/
-  │   │   ├── main.tf
-  │   │   ├── outputs.tf
-  │   │   └── variables.tf
-  │   ├── ec2/
-  │   │   ├── main.tf
-  │   │   ├── outputs.tf
-  │   │   ├── variables.tf
-  │   │   └── user_data.sh
-  │   └── s3/
-  │       ├── main.tf
-  │       ├── outputs.tf
-  │       └── variables.tf
+ - Terraform installed
+ - AWS credentials configured (e.g., via aws configure)
+ - SSH key pair available in the specified AWS region
 
 ## Getting Started ##
 1. Clone the repository
 
-git clone <repository-url>
+    git clone <repository-url>
 cd backend-resources
 2. Update variables
 Edit the variables.tf file to update the default values for your AWS region, VPC CIDR, subnet CIDR, AMI ID, instance type, key name, and other necessary variables.
