@@ -1,0 +1,39 @@
+- hosts: master
+  become: yes
+  tasks:
+  - name: Update cache
+    become: yes
+    become_user: ubuntu
+    apt:
+      update_cache: yes
+
+  - name: Install open-jdk-17
+    become: yes
+    become_user: ubuntu
+    apt:
+      name: openjdk-17-jdk
+      state: present
+
+  - name: Add key for Jenkins
+    become: yes
+    become_user: ubuntu
+    ansible.builtin.get_url:
+      url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+      dest: /usr/share/keyrings/jenkins-keyring.asc
+      mode: '0644'
+
+  - name: Add Jenkins repository to source list
+    ansible.builtin.apt_repository:
+      repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
+      state: present
+
+  - name: Update apt packages index
+    ansible.builtin.apt:
+      update_cache: yes
+
+  - name: Install Jenkins
+    ansible.builtin.apt:
+      name: jenkins
+      state: present
+      update_cache: yes
+
