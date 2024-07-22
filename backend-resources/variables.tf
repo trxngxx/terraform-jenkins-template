@@ -49,3 +49,9 @@ variable "acl" {
   type        = string
   default     = "private"
 }
+
+variable "eks_cluster_name" {
+  description = "Name of the EKS cluster"
+  type        = string
+  default     = "my-eks-cluster"
+}

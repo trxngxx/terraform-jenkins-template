@@ -37,3 +37,17 @@ output "jenkins_instance_id" {
 output "jenkins_public_ip" {
   value = module.ec2.public_ip
 }
+
+module "eks" {
+  source       = "./modules/eks"
+  cluster_name = var.eks_cluster_name
+  subnet_ids   = module.vpc.subnet_ids
+}
+
+output "eks_cluster_endpoint" {
+  value = module.eks.cluster_endpoint
+}
+
+output "eks_cluster_name" {
+  value = module.eks.cluster_name
+}
