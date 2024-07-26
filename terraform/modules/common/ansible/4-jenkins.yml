@@ -1,39 +1,82 @@
 - hosts: master
   become: yes
   tasks:
-  - name: Update cache
+  - name: Create Jenkins namespace
     become: yes
     become_user: ubuntu
-    apt:
-      update_cache: yes
+    shell: kubectl create namespace jenkins || true
 
-  - name: Install open-jdk-17
+  - name: Apply Jenkins Deployment
     become: yes
     become_user: ubuntu
-    apt:
-      name: openjdk-17-jdk
-      state: present
+    copy:
+      content: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: jenkins
+          labels:
+            app: jenkins
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: jenkins
+          template:
+            metadata:
+              labels:
+                app: jenkins
+            spec:
+              containers:
+              - name: jenkins
+                image: jenkins/jenkins:lts
+                ports:
+                - containerPort: 8080
+                - containerPort: 50000
+      dest: /tmp/jenkins_deployment.yml
 
-  - name: Add key for Jenkins
+  - name: Deploy Jenkins Deployment
     become: yes
     become_user: ubuntu
-    ansible.builtin.get_url:
-      url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-      dest: /usr/share/keyrings/jenkins-keyring.asc
-      mode: '0644'
+    shell: kubectl apply -f /tmp/jenkins_deployment.yml --namespace=jenkins
 
-  - name: Add Jenkins repository to source list
-    ansible.builtin.apt_repository:
-      repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
-      state: present
+  - name: Apply Jenkins Services
+    become: yes
+    become_user: ubuntu
+    copy:
+      content: |
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: jenkins
+        spec:
+          type: NodePort
+          ports:
+            - port: 8080
+              targetPort: 8080
+              nodePort: 30000
+          selector:
+            app: jenkins
+        ---
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: jenkins-jnlp
+        spec:
+          type: ClusterIP
+          ports:
+            - port: 50000
+              targetPort: 50000
+          selector:
+            app: jenkins
+      dest: /tmp/jenkins_service.yml
 
-  - name: Update apt packages index
-    ansible.builtin.apt:
-      update_cache: yes
+  - name: Deploy Jenkins Services
+    become: yes
+    become_user: ubuntu
+    shell: kubectl apply -f /tmp/jenkins_service.yml --namespace=jenkins
 
-  - name: Install Jenkins
-    ansible.builtin.apt:
-      name: jenkins
-      state: present
-      update_cache: yes
-
+  - name: Wait for Jenkins to be deployed
+    become: yes
+    become_user: ubuntu
+    shell: kubectl rollout status deployment/jenkins --namespace=jenkins
