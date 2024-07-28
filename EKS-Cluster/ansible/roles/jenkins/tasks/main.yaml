@@ -1,0 +1,13 @@
+- name: Create Jenkins deployment
+  template:
+    src: jenkins-deployment.yaml.j2
+    dest: /tmp/jenkins-deployment.yaml
+- name: Apply Jenkins deployment
+  command: kubectl apply -f /tmp/jenkins-deployment.yaml
+
+- name: Create Jenkins service
+  template:
+    src: jenkins-service.yaml.j2
+    dest: /tmp/jenkins-service.yaml
+- name: Apply Jenkins service
+  command: kubectl apply -f /tmp/jenkins-service.yaml

@@ -1,0 +1,9 @@
+- name: Deploy Jenkins to EKS
+  hosts: localhost
+  tasks:
+    - name: Configure kubectl
+      command: aws eks --region {{ aws_region }} update-kubeconfig --name {{ eks_cluster_name }}
+
+    - name: Deploy Jenkins
+      include_role:
+        name: jenkins
